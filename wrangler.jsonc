@@ -24,7 +24,7 @@
 
   "vars": {
     // La SEC exige un User-Agent con nombre y email REAL de contacto. Cámbialo.
-    "SEC_USER_AGENT": "Stock Hub tu-email@ejemplo.com",
+    "SEC_USER_AGENT": "Stock Hub carlos.grez@gmail.com",
     "WORKERS_AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
     "GEMINI_MODEL": "gemini-3.5-flash",
     // "gemini-first": usa Gemini si hay GEMINI_API_KEY y cae a Workers AI si falla.

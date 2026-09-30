@@ -37,7 +37,7 @@ Las páginas de `public/descubrir/` que vienen en el repo son de reemplazo; el b
 ## Publicar en Cloudflare
 
 1. Crea el repositorio `stock-hub` en GitHub y sube estos archivos.
-2. **Antes de publicar**, abre `wrangler.jsonc` y cambia el email de `SEC_USER_AGENT` por uno real. La SEC bloquea las consultas sin contacto válido, y el análisis fundamental depende de ella.
+2. El email de contacto para la SEC ya está en `SEC_USER_AGENT` (`wrangler.jsonc`). Si algún día lo cambias, usa uno real: la SEC bloquea las consultas sin contacto válido.
 3. En Cloudflare: **Workers & Pages → Create → Import a repository** y elige `stock-hub`.
    - Deploy command: `npx wrangler deploy`
    - El build de los screeners ya está declarado en `wrangler.jsonc`. Si después ves la página «Este screener todavía no se ha generado», pon en **Settings → Build → Build command**: `pip install -r requirements.txt && python screeners/build_all.py`
