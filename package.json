@@ -1,0 +1,18 @@
+{
+  "name": "stock-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Screeners, análisis técnico y análisis fundamental de acciones en un solo Cloudflare Worker.",
+  "type": "module",
+  "scripts": {
+    "screeners": "python screeners/build_all.py",
+    "screeners:demo": "DEMO=1 python screeners/build_all.py",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "kv:create": "wrangler kv namespace create CACHE"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

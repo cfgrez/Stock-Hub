@@ -1,0 +1,41 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Debe coincidir con el nombre del Worker en Cloudflare
+  "name": "stock-hub",
+  "main": "./src/index.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+
+  // Antes de publicar: genera los dos screeners (public/descubrir/...) con finvizfinance
+  "build": {
+    "command": "pip install -r requirements.txt && python screeners/build_all.py"
+  },
+
+  // Páginas estáticas: inicio, screeners generados, técnico y fundamental
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+
+  // Workers AI: respaldo de Gemini para la narrativa del análisis fundamental
+  "ai": {
+    "binding": "AI"
+  },
+
+  "vars": {
+    // La SEC exige un User-Agent con nombre y email REAL de contacto. Cámbialo.
+    "SEC_USER_AGENT": "Stock Hub tu-email@ejemplo.com",
+    "WORKERS_AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "GEMINI_MODEL": "gemini-3.5-flash",
+    // "gemini-first": usa Gemini si hay GEMINI_API_KEY y cae a Workers AI si falla.
+    // "workers-ai": usa solo Workers AI.
+    "AI_PROVIDER": "gemini-first"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+
+  // Caché KV opcional para el análisis técnico (ver README):
+  // ,"kv_namespaces": [{ "binding": "CACHE", "id": "PEGA_AQUI_EL_ID" }]
+}

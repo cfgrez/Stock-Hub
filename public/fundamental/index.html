@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Dashboard de análisis bursátil con caso bajista, Conviction Score y catalizadores de 12 meses."
+    />
+    <meta name="theme-color" content="#08111f" />
+    <title>Fundamental · Stock Hub</title>
+    <link rel="icon" href="/fundamental/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/fundamental/styles.css" />
+    <link rel="stylesheet" href="/shared/nav.css" />
+    <script src="/shared/nav.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="site-header">
+      <a class="brand" href="/fundamental/" aria-label="Análisis fundamental">
+        <span class="brand-mark">CF</span>
+        <span>
+          <strong>Conviction Filter</strong>
+          <small>Stock Research Dashboard</small>
+        </span>
+      </a>
+      <div class="header-note">Datos investigados al momento de cada consulta</div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero">
+        <div class="eyebrow">ANÁLISIS FUNDAMENTAL EN 3 FILTROS</div>
+        <h1>Descarta una acción antes de enamorarte de la historia.</h1>
+        <p>
+          Ingresa un ticker y obtén el caso bajista, un Conviction Score /100 y los
+          catalizadores de los próximos 12 meses. Si falla 2 de 3, queda fuera.
+        </p>
+
+        <form id="analysis-form" class="search-panel">
+          <label for="ticker-input">Ticker</label>
+          <div class="search-row">
+            <input
+              id="ticker-input"
+              name="ticker"
+              type="text"
+              maxlength="10"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Ej: IBM, NVDA, BRK.B"
+              aria-describedby="ticker-help"
+              required
+            />
+            <button id="analyze-button" type="submit">
+              <span>Analizar acción</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <div class="search-options">
+            <span id="ticker-help">Símbolos de EE.UU. y otros mercados con información pública.</span>
+            <label class="checkbox-label">
+              <input id="force-refresh" type="checkbox" />
+              Ignorar caché de 6 horas
+            </label>
+          </div>
+        </form>
+
+        <div class="quick-tickers" aria-label="Tickers de ejemplo">
+          <span>Probar:</span>
+          <button type="button" data-ticker="IBM">IBM</button>
+          <button type="button" data-ticker="NVDA">NVDA</button>
+          <button type="button" data-ticker="AAPL">AAPL</button>
+          <button type="button" data-ticker="PLTR">PLTR</button>
+        </div>
+      </section>
+
+      <section id="loading-state" class="loading-card hidden" aria-live="polite">
+        <div class="loader-orbit"><span></span></div>
+        <div>
+          <strong id="loading-title">Investigando la empresa…</strong>
+          <p id="loading-message">Leyendo los últimos 10-K y 10-Q en SEC EDGAR.</p>
+        </div>
+      </section>
+
+      <section id="error-state" class="error-card hidden" role="alert">
+        <strong>No se pudo completar el análisis</strong>
+        <p id="error-message"></p>
+      </section>
+
+      <section id="dashboard" class="dashboard hidden">
+        <div class="dashboard-actions no-print">
+          <button id="copy-summary" type="button">Copiar resumen</button>
+          <button id="print-dashboard" type="button">Imprimir / guardar PDF</button>
+        </div>
+
+        <section class="overview-card">
+          <div class="company-block">
+            <div class="ticker-badge" id="company-ticker">—</div>
+            <div>
+              <h2 id="company-name">—</h2>
+              <div class="company-meta">
+                <span id="company-exchange">—</span>
+                <span id="analysis-date">—</span>
+                <span id="cache-badge" class="cache-badge">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quote-block">
+            <div id="company-price" class="quote-price">—</div>
+            <div id="company-change" class="quote-change">—</div>
+            <div id="company-market-cap" class="quote-market-cap">—</div>
+          </div>
+
+          <div class="score-block">
+            <div id="score-ring" class="score-ring">
+              <div><strong id="score-total">0</strong><span>/100</span></div>
+            </div>
+            <div>
+              <small>Conviction Score</small>
+              <strong id="score-verdict">—</strong>
+            </div>
+          </div>
+        </section>
+
+        <section id="decision-banner" class="decision-banner">
+          <div>
+            <span class="decision-kicker">VEREDICTO DE LOS 3 FILTROS</span>
+            <h2 id="decision-title">—</h2>
+            <p id="decision-explanation">—</p>
+          </div>
+          <div id="decision-count" class="decision-count">—</div>
+        </section>
+
+        <section id="filter-grid" class="filter-grid"></section>
+
+        <section class="section-card summary-section">
+          <div class="section-heading">
+            <span class="section-number">00</span>
+            <div>
+              <h2>Resumen ejecutivo</h2>
+              <p>La tesis en pocas líneas, antes de entrar a los detalles.</p>
+            </div>
+          </div>
+          <p id="executive-summary" class="executive-summary"></p>
+          <div id="market-metrics" class="market-metrics"></div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <span class="section-number">01</span>
+            <div>
+              <h2>Caso bajista</h2>
+              <p>Tres formas concretas en que la inversión podría fallar.</p>
+            </div>
+          </div>
+          <div id="risk-grid" class="risk-grid"></div>
+          <div id="insider-panel" class="insider-panel"></div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <span class="section-number">02</span>
+            <div>
+              <h2>Conviction Score</h2>
+              <p>Calidad, crecimiento, deuda, precio y valoración bajo una rúbrica fija.</p>
+            </div>
+          </div>
+          <div id="score-breakdown" class="score-breakdown"></div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <span class="section-number">03</span>
+            <div>
+              <h2>Catalizadores a 12 meses</h2>
+              <p>Qué podría destrabar valor, cuándo y cuánto ya descuenta el mercado.</p>
+            </div>
+          </div>
+          <div id="catalyst-grid" class="catalyst-grid"></div>
+        </section>
+
+        <section class="section-card table-section">
+          <div class="section-heading">
+            <span class="section-number">08</span>
+            <div>
+              <h2>Últimos 8 trimestres</h2>
+              <p>Tendencia de ingresos, márgenes, flujo de caja y guidance.</p>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Periodo</th>
+                  <th>Ingresos YoY</th>
+                  <th>Margen bruto</th>
+                  <th>Margen operativo</th>
+                  <th>FCF</th>
+                  <th>Guidance / contexto</th>
+                </tr>
+              </thead>
+              <tbody id="quarters-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section-card sources-section">
+          <div class="section-heading">
+            <span class="section-number">S</span>
+            <div>
+              <h2>Fuentes y limitaciones</h2>
+              <p>Documentos utilizados para respaldar el análisis.</p>
+            </div>
+          </div>
+          <div id="sources-list" class="sources-list"></div>
+          <div id="limitations-list" class="limitations-list"></div>
+        </section>
+      </section>
+
+      <aside id="history-panel" class="history-panel hidden no-print">
+        <div class="history-heading">
+          <strong>Análisis recientes</strong>
+          <button id="clear-history" type="button">Limpiar</button>
+        </div>
+        <div id="history-list"></div>
+      </aside>
+    </main>
+
+    <footer>
+      Herramienta de investigación, no asesoría financiera. Verifica los datos antes de invertir.
+    </footer>
+
+    <script type="module" src="/fundamental/app.js"></script>
+  </body>
+</html>

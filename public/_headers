@@ -1,0 +1,11 @@
+# Cabeceras de seguridad para todo el sitio
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Política estricta heredada de Conviction Filter (sin scripts ni estilos en línea).
+# Las demás páginas usan estilos/scripts en línea y fuentes de Google, por eso no la llevan.
+/fundamental/*
+  Content-Security-Policy: default-src 'self'; connect-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'

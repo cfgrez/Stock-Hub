@@ -1,0 +1,79 @@
+/* Stock Hub — barra común. Todo va bajo #sh-bar para no chocar con los estilos de cada página. */
+#sh-bar, #sh-bar * { all: unset; box-sizing: border-box; }
+#sh-bar {
+  --sh-ink: #1B2733;
+  --sh-ink-2: #243442;
+  --sh-line: #34475A;
+  --sh-text: #E6ECF1;
+  --sh-mut: #93A4B4;
+  --sh-gold: #F2C14E;
+  display: flex; align-items: stretch; gap: 18px;
+  position: relative; z-index: 1000;
+  min-height: 52px; padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--sh-ink); color: var(--sh-text);
+  border-bottom: 1px solid var(--sh-line);
+  font: 500 14px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+#sh-bar .sh-brand {
+  display: flex; align-items: center; gap: 9px; flex: none;
+  font-weight: 700; font-size: 15px; letter-spacing: -.01em; color: var(--sh-text); cursor: pointer;
+}
+#sh-bar .sh-mark { display: grid; grid-template-columns: repeat(3, 4px); align-items: end; gap: 2px; height: 16px; }
+#sh-bar .sh-mark i { display: block; width: 4px; background: var(--sh-gold); border-radius: 1px; }
+#sh-bar .sh-mark i:nth-child(1) { height: 16px; }
+#sh-bar .sh-mark i:nth-child(2) { height: 11px; opacity: .8; }
+#sh-bar .sh-mark i:nth-child(3) { height: 6px; opacity: .6; }
+#sh-bar .sh-nav {
+  display: flex; align-items: stretch; gap: 22px; flex: 1 1 auto; min-width: 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+#sh-bar .sh-nav::-webkit-scrollbar { display: none; }
+#sh-bar .sh-group { display: flex; align-items: stretch; gap: 14px; flex: none; }
+#sh-bar .sh-glabel { display: flex; align-items: center; color: var(--sh-mut); font-size: 12px; font-weight: 500; }
+#sh-bar .sh-link {
+  display: flex; align-items: center; gap: 6px; flex: none; cursor: pointer;
+  color: var(--sh-text); white-space: nowrap;
+  border-bottom: 2px solid transparent; padding-top: 2px;
+}
+#sh-bar .sh-link:hover { color: #fff; border-bottom-color: var(--sh-line); }
+#sh-bar .sh-link[aria-current="page"] { color: #fff; border-bottom-color: var(--sh-gold); }
+#sh-bar .sh-tk { color: var(--sh-gold); font-size: 12px; font-weight: 600; }
+#sh-bar .sh-count {
+  display: inline-block; min-width: 18px; padding: 1px 5px; border-radius: 9px; text-align: center;
+  background: var(--sh-ink-2); color: var(--sh-mut); font-size: 11px; font-weight: 600;
+}
+#sh-bar .sh-count:empty { display: none; }
+#sh-bar .sh-search { display: flex; align-items: center; gap: 6px; flex: none; }
+#sh-bar .sh-search input {
+  width: 110px; height: 32px; padding: 0 10px; border-radius: 6px;
+  background: var(--sh-ink-2); border: 1px solid var(--sh-line); color: var(--sh-text);
+  font: inherit; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; cursor: text;
+}
+#sh-bar .sh-search input::placeholder { color: var(--sh-mut); text-transform: none; letter-spacing: 0; }
+#sh-bar .sh-search button {
+  height: 32px; padding: 0 12px; border-radius: 6px; cursor: pointer;
+  background: var(--sh-gold); color: var(--sh-ink); font-weight: 700; font-size: 13px;
+}
+#sh-bar a:focus-visible, #sh-bar button:focus-visible, #sh-bar input:focus-visible {
+  outline: 2px solid var(--sh-gold); outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  #sh-bar { flex-wrap: wrap; gap: 0 14px; padding-bottom: 0; }
+  #sh-bar .sh-brand { min-height: 48px; }
+  #sh-bar .sh-search { margin-left: auto; }
+  #sh-bar .sh-nav { order: 3; flex-basis: 100%; min-height: 40px; border-top: 1px solid var(--sh-line); }
+  #sh-bar .sh-glabel { display: none; }
+}
+@media print { #sh-bar, .sh-star { display: none !important; } }
+
+/* Estrella de watchlist en las tablas de los screeners */
+.sh-star.sh-star {
+  all: unset; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; margin-left: 6px; vertical-align: middle; border-radius: 4px;
+  cursor: pointer; font-size: 15px; line-height: 1; color: #93A4B4;
+}
+.sh-star.sh-star:hover { color: #C9971F; }
+.sh-star.sh-star[aria-pressed="true"] { color: #D9A520; }
+.sh-star.sh-star:focus-visible { outline: 2px solid #D9A520; outline-offset: 1px; }
